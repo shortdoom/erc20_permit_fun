@@ -1,26 +1,49 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-// When running the script with `hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 import { Contract, ContractFactory } from "ethers";
+import { PERMIT_TYPEHASH, getPermitDigest, getDomainSeparator, sign } from './signatures';
+import { TestERC20__factory} from "../typechain";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+
+// This can be deployed on local node fine
 
 async function main(): Promise<void> {
-  // Hardhat always runs the compile task when running scripts through it.
-  // If this runs in a standalone fashion you may want to call compile manually
-  // to make sure everything is compiled
-  // await run("compile");
+  let permitContract: Contract;
+  let owner: SignerWithAddress; // Ethers Signer object wrapped, nice
+  let user1: SignerWithAddress;
+  let user2: SignerWithAddress;
+  let user3: SignerWithAddress;
 
-  // We get the contract to deploy
-  const Greeter: ContractFactory = await ethers.getContractFactory("Greeter");
-  const greeter: Contract = await Greeter.deploy("Hello, Buidler!");
-  await greeter.deployed();
+  [owner, user1, user2, user3] = await ethers.getSigners();
+  console.log(owner.address, user1.address, user2.address);
+  const supply = ethers.BigNumber.from('1000000000000000000000000');
+  
+  // One way of doing that without typechain import
+  const Permit: ContractFactory = await ethers.getContractFactory("TestERC20");
+  permitContract = await Permit.deploy(supply);
+  await permitContract.deployed();
+  console.log("Permit deployed to: ", permitContract.address);
 
-  console.log("Greeter deployed to: ", greeter.address);
+  // Second way of doing that with typechain import
+  const TestERC20Factory = new TestERC20__factory(user1);
+  permitContract = await TestERC20Factory.deploy(supply);
+  console.log("Permit deployed to: ", permitContract.address);
+  console.log("Using address:", user1.address);
+
+  async function mint() {
+    // Mint some ERC20Permit tokens to user1
+    // Log balance (you already have permitContract with balanceOf method)
+  }
+
+  async function signature() {
+    // Generate signature for users here using helper functions from signatures.ts
+  }
+
+  async function sendSignature() {
+    // Send tokens using permit from user1 to user2
+  }
+
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
   .then(() => process.exit(0))
   .catch((error: Error) => {

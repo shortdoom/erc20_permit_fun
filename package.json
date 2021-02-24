@@ -72,6 +72,8 @@
     "typechain": "hardhat typechain"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^3.4.0",
+    "ethereumjs-util": "^7.0.8",
     "solc": "0.8.1"
   }
 }
