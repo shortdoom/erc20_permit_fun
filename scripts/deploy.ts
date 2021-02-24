@@ -15,7 +15,8 @@ async function main(): Promise<void> {
 
   [owner, user1, user2, user3] = await ethers.getSigners();
   console.log(owner.address, user1.address, user2.address);
-  const supply = ethers.BigNumber.from('1000000000000000000000000');
+  const supply = ethers.BigNumber.from('1000000000000000000000000'); // 1000000 Tokens
+  const toMint = ethers.BigNumber.from('100000000000000000000'); // 100 Tokens
   
   // One way of doing that without typechain import
   const Permit: ContractFactory = await ethers.getContractFactory("TestERC20");
@@ -29,9 +30,17 @@ async function main(): Promise<void> {
   console.log("Permit deployed to: ", permitContract.address);
   console.log("Using address:", user1.address);
 
+  console.log('Minting to user1');
+  await mint();
+
   async function mint() {
     // Mint some ERC20Permit tokens to user1
     // Log balance (you already have permitContract with balanceOf method)
+    permitContract.connect(owner);
+    await permitContract.mint(user1.address, toMint);
+    console.log('Mint done');
+    const userBalance = await permitContract.balanceOf(user1.address);
+    console.log("User1 balance", ethers.utils.formatEther(userBalance));
   }
 
   async function signature() {
