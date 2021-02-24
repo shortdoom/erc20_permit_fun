@@ -11,9 +11,8 @@ async function main(): Promise<void> {
   let owner: SignerWithAddress; // Ethers Signer object wrapped, nice
   let user1: SignerWithAddress;
   let user2: SignerWithAddress;
-  let user3: SignerWithAddress;
 
-  [owner, user1, user2, user3] = await ethers.getSigners();
+  [owner, user1, user2] = await ethers.getSigners();
   console.log(owner.address, user1.address, user2.address);
   const supply = ethers.BigNumber.from('1000000000000000000000000'); // 1000000 Tokens
   const toMint = ethers.BigNumber.from('100000000000000000000'); // 100 Tokens
@@ -32,6 +31,8 @@ async function main(): Promise<void> {
 
   console.log('Minting to user1');
   await mint();
+  console.log("Generate user signature");
+  await signature();
 
   async function mint() {
     // Mint some ERC20Permit tokens to user1
@@ -45,7 +46,39 @@ async function main(): Promise<void> {
 
   async function signature() {
     // Generate signature for users here using helper functions from signatures.ts
-  }
+    const approve = {
+      owner: user1.address,
+      spender: user2.address,
+      value: 100,
+    }
+
+    const name = permitContract.name();
+    const nonce = 1;
+    const chainId = 1337;
+    const deadline = 1000000000;
+    const privateKey = user1.privateKey;
+
+    const digest = getPermitDigest(
+      name, 
+      permitContract.address, 
+      chainId, 
+      approve, 
+      nonce, 
+      deadline
+      )
+    
+    const { v, r, s } = sign(digest, ownerPrivateKey)
+
+    const receipt = await permitContract.permit(
+      approve.owner, 
+      approve.spender, 
+      approve.value, 
+      deadline, 
+      v, 
+      r, 
+      s
+      );
+  } 
 
   async function sendSignature() {
     // Send tokens using permit from user1 to user2
