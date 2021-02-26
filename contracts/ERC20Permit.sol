@@ -75,3 +75,7 @@ abstract contract ERC20Permit is ERC20, IERC2612 {
         _approve(owner, spender, amount);
     }
 }
+
+        // require(hasRole(BACKEND_ROLE, msg.sender), "Not authorized to call");
+        // require that sender has backend role, otherwise throw
+        // require that signer is not 0 and signer is owner
