@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { BigNumberish, Contract, ContractFactory } from "ethers";
 import { PERMIT_TYPEHASH, getPermitDigest, getDomainSeparator, sign } from './signatures';
-import { TestERC20__factory} from "../typechain";
+import { OpenzeppelinPermit__factory} from "../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 
 async function main(): Promise<void> {
@@ -15,28 +15,19 @@ async function main(): Promise<void> {
   const supply = ethers.BigNumber.from('1000000000000000000000000'); // 1000000 Tokens
   const toMint = ethers.BigNumber.from('1000000000000000000000'); // 1000 Tokens
   
-  // One way of deploying without typechain import
-
-  const Permit: ContractFactory = await ethers.getContractFactory("TestERC20");
+  const Permit: ContractFactory = await ethers.getContractFactory("OpenzeppelinPermit");
   permitContract = await Permit.deploy(supply);
   await permitContract.deployed();
   console.log("PermitContract deployed to:", permitContract.address);
-
-  // Second way of deploying with typechain import
-
-  // const TestERC20Factory = new TestERC20__factory(owner);
-  // permitContract = await TestERC20Factory.deploy(supply);
-  // console.log("Permit deployed to: ", permitContract.address);
-  // console.log("Using address:", owner.address);
 
   console.log('Minting some coins');
   await mint();
 
   console.log("Generate user signature");
-  await signature();
+  // await signature();
 
   console.log('Sending using permit');
-  await sendWithPermit();
+  // await sendWithPermit();
 
   async function mint() {
 
@@ -67,8 +58,8 @@ async function main(): Promise<void> {
     console.log('Nonce', nonce);
     const chainId = 31337;
     const deadline = 100000000000000;
-
-    // Using first account from getSigners()
+    
+    // Using first account from getSigners(). Remove 0x prefix!
     const ownerPrivateKey = Buffer.from('7eb6d980caf48ba450b2eda81e10511609d80984bd9b734c207a8748699f87be', 'hex');
 
     const digest = getPermitDigest(
@@ -114,7 +105,6 @@ async function main(): Promise<void> {
     const userBalance2 = await permitContract.balanceOf(user2.address);
     console.log("User2 balance", ethers.utils.formatEther(userBalance2));
   }
-
 }
 
 main()

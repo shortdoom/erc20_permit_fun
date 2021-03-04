@@ -1,17 +1,34 @@
-# Solidity Template
+# ERC20Permit with Ethers, TypeScript and Hardhat
 
-My favourite setup for writing Solidity smart contracts.
+This repository uses Solidity Hardhat Template
 
-- [Hardhat](https://github.com/nomiclabs/hardhat): compile and run the smart contracts on a local development network
-- [TypeChain](https://github.com/ethereum-ts/TypeChain): generate TypeScript types for smart contracts
-- [Ethers](https://github.com/ethers-io/ethers.js/): renowned Ethereum library and wallet implementation
-- [Waffle](https://github.com/EthWorks/Waffle): tooling for writing comprehensive smart contract tests
-- [Solhint](https://github.com/protofire/solhint): linter
-- [Solcover](https://github.com/sc-forks/solidity-coverage) code coverage
-- [Prettier Plugin Solidity](https://github.com/prettier-solidity/prettier-plugin-solidity): code formatter
+# Motivation
 
-This is a GitHub template, which means you can reuse it as many times as you want. You can do that by clicking the "Use this
-template" button at the top of the page.
+ERC20Permit is one of interesting ways to implement gasless transactions. This repository is educational. It gathers available resources on ERC20Permit and implements found soultions using Typescript in Hardhat. Version 3.4 of Openzeppelin contracts introduced ERC20Permit in drafts, this repository implements Openzeppelin contracts for showcase.
+
+# Resources
+
+[Alberto Cuesta Canada repository. Original implementation](https://github.com/albertocuestacanada/ERC20Permit)
+[How to code gasless tokens on ethereum](https://hackernoon.com/how-to-code-gas-less-tokens-on-ethereum-43u3ew4)
+[Banteg repository with very good explanations available](https://github.com/banteg/permit-deposit)
+[Dai implementation was first](https://docs.makerdao.com/smart-contract-modules/dai-module/dai-detailed-documentation)
+[Good overview of what are meta transactions on stackexchange](https://ethereum.stackexchange.com/a/78653)
+[AAVE Token with example permit script in web3.js](https://docs.aave.com/developers/the-core-protocol/aave-token#permit)
+
+# Repository
+
+This contract executes example permit using `deploy.ts` and `deployOz.ts` scripts. Currently there is no tests.
+
+First, visit **Usage** section to install all dependencies and compile contracts. There is some random mnemonic set in `.env.example` to get you started, supply your own Infura key or comment out this section from `hardhat.config.ts`, 
+
+Run with
+
+`npx hardhat run scripts/deploy.ts` for `albertocuestacanada` repository
+
+or 
+
+`npx hardhat run scripts/deployOz.ts` for `openzeppelin` repository
+
 
 ## Usage
 
