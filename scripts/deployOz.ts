@@ -24,10 +24,10 @@ async function main(): Promise<void> {
   await mint();
 
   console.log("Generate user signature");
-  // await signature();
+  await signature();
 
   console.log('Sending using permit');
-  // await sendWithPermit();
+  await sendWithPermit();
 
   async function mint() {
 
@@ -59,8 +59,9 @@ async function main(): Promise<void> {
     const chainId = 31337;
     const deadline = 100000000000000;
     
-    // Using first account from getSigners(). Remove 0x prefix!
-    const ownerPrivateKey = Buffer.from('7eb6d980caf48ba450b2eda81e10511609d80984bd9b734c207a8748699f87be', 'hex');
+    // Using first account from getSigners()
+    // Depends on .env mnemonic you set. Remember to remove 0x from private key.
+    const ownerPrivateKey = Buffer.from('cd35f7d97cfbe2df7873baa697e9388afaf6d79da259ce6b8caff105753d8a2d', 'hex');
 
     const digest = getPermitDigest(
       name, 
@@ -97,7 +98,13 @@ async function main(): Promise<void> {
     const permitValue = ethers.BigNumber.from('900000000000000000000');
 
     const UserPermitContract = permitContract.connect(user2);
+    // function transferFrom(address sender, address recipient, uint256 amount)
+    // where, user2 pays gas (assumption to test)
     await UserPermitContract.transferFrom(user1.address, user2.address, permitValue, {from: user2.address});
+
+    // No free lunch. This works only with transferFrom between user accounts, not with contract calls
+    // Contract calls need relayer implementation (like OpenGSN).
+    // await UserPermitContract.transferFrom(user1.address, relayer.address, permitValue, {from: relayer.address});
     console.log('Transfered!');
 
     const userBalance1 = await permitContract.balanceOf(user1.address);

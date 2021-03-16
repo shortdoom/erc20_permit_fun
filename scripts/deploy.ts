@@ -69,7 +69,8 @@ async function main(): Promise<void> {
     const deadline = 100000000000000;
 
     // Using first account from getSigners()
-    const ownerPrivateKey = Buffer.from('7eb6d980caf48ba450b2eda81e10511609d80984bd9b734c207a8748699f87be', 'hex');
+    // Depends on .env mnemonic you set. Remember to remove 0x from private key.
+    const ownerPrivateKey = Buffer.from('cd35f7d97cfbe2df7873baa697e9388afaf6d79da259ce6b8caff105753d8a2d', 'hex');
 
     const digest = getPermitDigest(
       name, 
