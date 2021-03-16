@@ -4,15 +4,20 @@ This repository uses Solidity Hardhat Template
 
 # Motivation
 
-ERC20Permit is one of interesting ways to implement gasless transactions. This repository is educational. It gathers available resources on ERC20Permit and implements found soultions using Typescript in Hardhat. Version 3.4 of Openzeppelin contracts introduced ERC20Permit in drafts, this repository implements Openzeppelin contracts for showcase.
+ERC20Permit is one of the interesting ways to implement gasless transactions. This repository is educational. It gathers available resources on ERC20Permit and implements found soultions using Typescript in Hardhat. Version 3.4 of Openzeppelin contracts introduced ERC20Permit in drafts, this repository implements Openzeppelin contracts for a showcase.
 
 # Resources
 
 [Alberto Cuesta Canada repository. Original implementation](https://github.com/albertocuestacanada/ERC20Permit)
+
 [How to code gasless tokens on ethereum](https://hackernoon.com/how-to-code-gas-less-tokens-on-ethereum-43u3ew4)
+
 [Banteg repository with very good explanations available](https://github.com/banteg/permit-deposit)
+
 [Dai implementation was first](https://docs.makerdao.com/smart-contract-modules/dai-module/dai-detailed-documentation)
+
 [Good overview of what are meta transactions on stackexchange](https://ethereum.stackexchange.com/a/78653)
+
 [AAVE Token with example permit script in web3.js](https://docs.aave.com/developers/the-core-protocol/aave-token#permit)
 
 # Repository
@@ -28,6 +33,10 @@ Run with
 or 
 
 `npx hardhat run scripts/deployOz.ts` for `openzeppelin` repository
+
+# ToDo
+
+Contract only works for happy-case user-to-user transfer. Following `There is no free lunch` principle, to execute permit with contract call (e.g User1 wants User2 to pay all costs of token swap on Uniswap and relay tokens back to User1) an implementation of relayer network is needed, for example OpenGSN.
 
 
 ## Usage
